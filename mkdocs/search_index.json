@@ -107,12 +107,12 @@
         },
         {
             "location": "/tutorial/",
-            "text": "Readux Tutorial\n\n\nYea, I'm not that far yet, sorry :(\n\n\nFor now, try to read the example in \nexamples/todo\n.",
+            "text": "Readux Tutorial\n\n\nYea, I'm not that far yet, sorry :(\n\n\nFor now, try to read the example in \nexamples/todo\n...",
             "title": "Tutorial"
         },
         {
             "location": "/tutorial/#readux-tutorial",
-            "text": "Yea, I'm not that far yet, sorry :(  For now, try to read the example in  examples/todo .",
+            "text": "Yea, I'm not that far yet, sorry :(  For now, try to read the example in  examples/todo ...",
             "title": "Readux Tutorial"
         }
     ]

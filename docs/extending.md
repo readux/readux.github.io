@@ -42,8 +42,8 @@ yields a new model which is the result of applying the action to the old model.
 ```
 
 ### Using middleware
-Middleware is used by composing it with your application's reducer using [`comp`](http://clojuredocs.org/clojure.core/comp)
-or the [`->`](http://clojuredocs.org/clojure.core/-%3E) threading macro.
+Middleware is used by composing it with your application's reducer using [composition (`comp`)](http://clojuredocs.org/clojure.core/comp)
+or the [threading macro (`->`)](http://clojuredocs.org/clojure.core/-%3E) threading macro.
 
 You can express the order of execution in whichever way feels the most natural:
 ```clojure
@@ -89,3 +89,11 @@ With our additional data, we can implement new store functions, such as this:
 ```
 
 ### Using Store Enhancers
+The store function accepts an additional argument, allowing you to specify an enhancer function.
+To use multiple store enhancers, use [composition](http://clojuredocs.org/clojure.core/comp).
+
+```
+(def s (store my-reducer make-stores-great-again))
+(great-store? s)
+;;=> true
+```

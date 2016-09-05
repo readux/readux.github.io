@@ -1,0 +1,53 @@
+@import 'https://fonts.googleapis.com/css?family=Ubuntu';
+h1,h2,h3,h4,h5,h6,body {
+    font-family: 'Ubuntu', 'Helvetica', 'Open Sans', 'Helvetica Neue', 'sans-serif';
+    font-weight: lighter;
+    color: rgba(0,0,0,.87)
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: #e53935;
+}
+
+h1 {
+    font-size: 26px;
+    line-height: 2.2em;
+}
+h2 {
+    font-size: 23px;
+    line-height: 1.8em;
+}
+h3 {
+    font-size: 20px;
+}
+h4 {
+    font-size: 17px;
+}
+
+.navbar-default {
+    background-color: #e84e40;
+}
+
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #e53935;
+}
+a {
+    color: #26A69A;
+}
+
+a:hover, a:focus {
+    color: #26A69A;
+    -webkit-transition: color 600ms ease-in-out 0;
+    -moz-transition: color 600ms ease-in-out 0;
+    transition: color 600ms ease-in-out 0;
+}
+
+.navbar-default .navbar-nav > .disabled > a, .navbar-default .navbar-nav > .disabled > a:hover, .navbar-default .navbar-nav > .disabled > a:focus {
+    color: #e0e0e0;
+}
+
+code {
+    color: #e53935;
+}

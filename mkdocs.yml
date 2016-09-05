@@ -1,0 +1,6 @@
+site_name: Readux Documentation
+theme: cinder
+repo_url: "https://github.com/readux/"
+remote_branch: master
+extra_css:
+  - "extra/style.css"

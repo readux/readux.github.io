@@ -193,8 +193,8 @@ yields a new model which is the result of applying the action to the old model.<
 </code></pre>
 
 <h3 id="using-middleware">Using middleware</h3>
-<p>Middleware is used by composing it with your application's reducer using <a href="http://clojuredocs.org/clojure.core/comp"><code>comp</code></a>
-or the <a href="http://clojuredocs.org/clojure.core/-%3E"><code>-&gt;</code></a> threading macro.</p>
+<p>Middleware is used by composing it with your application's reducer using <a href="http://clojuredocs.org/clojure.core/comp">composition (<code>comp</code>)</a>
+or the <a href="http://clojuredocs.org/clojure.core/-%3E">threading macro (<code>-&gt;</code>)</a> threading macro.</p>
 <p>You can express the order of execution in whichever way feels the most natural:</p>
 <pre><code class="clojure">((-&gt; my-reducer baz bar foo) ...)
 ;;execution order: foo, bar, baz, my-reducer
@@ -229,7 +229,13 @@ additional entries to facilitate some expanded interface.</p>
   (get @store :is-great? false))
 </code></pre>
 
-<h3 id="using-store-enhancers">Using Store Enhancers</h3></div>
+<h3 id="using-store-enhancers">Using Store Enhancers</h3>
+<p>The store function accepts an additional argument, allowing you to specify an enhancer function.
+To use multiple store enhancers, use <a href="http://clojuredocs.org/clojure.core/comp">composition</a>.</p>
+<pre><code>(def s (store my-reducer make-stores-great-again))
+(great-store? s)
+;;=&gt; true
+</code></pre></div>
         
     </div>
 

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <link rel="shortcut icon" href="../img/favicon.ico">
 
-    <title>Extending - Readux Documentation</title>
+    <title>Extending readux - Readux Documentation</title>
 
     <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
@@ -73,20 +73,44 @@
                 
                 
                 
-                    <li >
-                        <a href="../design/">Design</a>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Design <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../design/">Design overview</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Extending readux</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
                 
-                    <li class="active">
-                        <a href="./">Extending</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../tutorial/">Tutorial</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../effective-reagent/">Effective Reagent</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../tutorial/">Tutorial</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -106,7 +130,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../tutorial/">
+                        <a rel="prev" href="../effective-reagent/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -170,39 +194,70 @@ before an action reaches your store's root reducer or before the
 resulting model is persisted.</p>
 <h3 id="example-handling-promises">Example: Handling Promises</h3>
 <p>Say we wanted to automatically process incoming actions which submits a
-promise as their argument, splitting the action <code>:FOO</code> into <code>:FOO/PENDING</code>
-<code>:FOO/SUCCESS</code> and <code>:FOO/FAILURE</code> to signify when the request is made,
-and when it ends in a success or an error, respectively.
-We could wrap this process ourselves for each async request our application
-would make, or write a piece of middleware to handle promises for us.</p>
+promise as their argument, splitting the action <code>:fetch-posts</code> into 
+<code>:fetch-posts.rq</code>, <code>:fetch-posts.success</code> and <code>:fetch-posts.error</code> to signify
+when the request is made, and when it ends in a success or an error,
+respectively. We could wrap this process ourselves for each async request our
+application would make, or write a piece of middleware to handle promises for us.</p>
+<p><em>Incidentially, if you wish to do this, or already use <a href="http://funcool.github.io/promesa/latest/">promesa</a>,
+try <a href="https://github.com/readux/readux-promesa">readux-promesa</a></em>.</p>
 <h3 id="example-verifying-app-model-with-cljsspec">Example: Verifying app model with cljs.spec</h3>
 <p>Similarly, if you wished to ensure that for each action, the model
 retained some specific structure, you could implement a middleware function
 to validate the resulting model against a clojure.spec schema.</p>
 <h3 id="writing-middleware">Writing middleware</h3>
-<p><strong>Signature:</strong> <code>next -&gt; model, action [, args ...] -&gt; new-model</code></p>
+<p><strong>Signature:</strong> <code>next -&gt; model, action -&gt; new-model</code></p>
 <p>We see from the signature that middleware takes a single argument '<code>next</code>', which
 is the middleware/reducer function to execute next. From this, we get a function,
-which, when given a '<code>model</code>', an '<code>action</code>' (and optionally some '<code>args</code>'),
-yields a new model which is the result of applying the action to the old model.</p>
+which, when given a '<code>model</code>' and an '<code>action</code>', yields a new model which is the
+result of applying the action to the old model.</p>
 <pre><code class="clojure">;; This middleware does nothing but pass the action along.
 (defn passthrough-middleware
   [next]
-  (fn [model action &amp; args]
-    (apply next model action args)))
+  (fn [model action]
+    (apply next model action)))
 </code></pre>
 
+<p>Often times, you only need to do something to an action or in response to
+an action <em>before</em> it is received by the reducer, but sometimes it can
+be handy to work on the resulting model too.</p>
+<p>Readux ships with a middleware function, <code>log-model-diff</code> which can show you
+every action that is dispatched and how it changed the model. 
+<code>log-model-diff</code> stores a copy of the model before passing it on to the next
+middleware function in the chain, ideally the reducer itself, comparing the 
+resulting model to the initial model.
+Try reading its <a href="https://github.com/readux/readux/blob/master/src/cljs/readux/middleware/log_model_diff.cljs">source</a>
+for inspiration on writing your own middleware functions.</p>
+<p>Remember, middleware functions can:</p>
+<ol>
+<li>prematurely abort processing simply by not calling the next function in line.</li>
+<li>alter/replace and dispatch additional actions. <ul>
+<li>(see <a href="https://github.com/readux/readux-promesa/blob/master/src/cljs/readux_promesa/core.cljs">readux-promesa</a> which uses this to handle promises)</li>
+</ul>
+</li>
+<li>alter/replace the input model before passing it on to the next function</li>
+<li>alter/replace the new model before returning it to the caller (ultimately the <code>dispatch</code> function, which stores the new model)</li>
+</ol>
 <h3 id="using-middleware">Using middleware</h3>
-<p>Middleware is used by composing it with your application's reducer using <a href="http://clojuredocs.org/clojure.core/comp">composition (<code>comp</code>)</a>
-or the <a href="http://clojuredocs.org/clojure.core/-%3E">threading macro (<code>-&gt;</code>)</a> threading macro.</p>
-<p>You can express the order of execution in whichever way feels the most natural:</p>
-<pre><code class="clojure">((-&gt; my-reducer baz bar foo) ...)
-;;execution order: foo, bar, baz, my-reducer
-
-(((comp baz bar foo) my-reducer) ...)
-;; execution order: baz, bar, foo, my-reducer
+<p>To use middleware, we supply <code>store</code> with an optional second argument
+which modifies the construction of the store somehow before it is
+returned to us.</p>
+<p>In this case, using <code>apply-mw</code> allows us to install an arbitrary sequence
+of functions in between <code>dispatch</code> which first receives and action, and
+the store's reducer function. Here's an example:</p>
+<pre><code class="clojure">(require '[readux.core :as rdc])
+(require '[readux.store :as rds])
+;; ...
+(defonce store (rdc/store app-reducer (rds/apply-mw some-other-middleware log-model-diff)))
 </code></pre>
 
+<p>In this case, the action will go through the system like so:</p>
+<ol>
+<li><code>dispatch</code> this is when the action is first dispatched </li>
+<li><code>some-other-middleware</code></li>
+<li><code>log_model_diff</code></li>
+<li><code>app-reducer</code> - the application's reducer function.</li>
+</ol>
 <h2 id="store-enhancers">Store enhancers</h2>
 <p><strong>Signature:</strong> <code>store -&gt; store</code></p>
 <p>Store enhancers, as their name implies, modify the store object itself. Generally, store enhancers should be used when
@@ -215,6 +270,7 @@ The dispatch function normally finds the store's reducer, and passes along the a
 new model.
 By replacing the dispatcher, the readux-debugger can intercept and assure that debug-related actions never reach the
 app reducer while ensuring app-related actions are dispatched to both the debugger and app stores.</p>
+<p>(<strong>NOTE</strong> not presently released, coming soon)</p>
 <h3 id="writing-store-enhancers">Writing Store Enhancers</h3>
 <p>The smallest possible example is also a bit silly, typically you want to wrap the <code>:dispatch</code> function or add some
 additional entries to facilitate some expanded interface.</p>
@@ -229,6 +285,8 @@ additional entries to facilitate some expanded interface.</p>
   (get @store :is-great? false))
 </code></pre>
 
+<p>The ability for a store to use middleware functions is actually implemented as
+a store enhancer, see <code>apply-mw</code> in <a href="https://github.com/readux/readux/blob/master/src/cljs/readux/store.cljs">readux store.cljs</a>.</p>
 <h3 id="using-store-enhancers">Using Store Enhancers</h3>
 <p>The store function accepts an additional argument, allowing you to specify an enhancer function.
 To use multiple store enhancers, use <a href="http://clojuredocs.org/clojure.core/comp">composition</a>.</p>

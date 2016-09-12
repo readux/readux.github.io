@@ -4,33 +4,41 @@
     
     <url>
      <loc>None/</loc>
-     <lastmod>2016-09-06</lastmod>
+     <lastmod>2016-09-13</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
+        
     <url>
      <loc>None/design/</loc>
-     <lastmod>2016-09-06</lastmod>
+     <lastmod>2016-09-13</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
+        
     <url>
      <loc>None/extending/</loc>
-     <lastmod>2016-09-06</lastmod>
+     <lastmod>2016-09-13</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
     
 
     
+        
     <url>
-     <loc>None/tutorial/</loc>
-     <lastmod>2016-09-06</lastmod>
+     <loc>None/effective-reagent/</loc>
+     <lastmod>2016-09-13</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
+    <url>
+     <loc>None/tutorial/</loc>
+     <lastmod>2016-09-13</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
 </urlset>

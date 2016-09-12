@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <link rel="shortcut icon" href="../img/favicon.ico">
 
-    <title>Design - Readux Documentation</title>
+    <title>Design overview - Readux Documentation</title>
 
     <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
@@ -73,20 +73,44 @@
                 
                 
                 
-                    <li class="active">
-                        <a href="./">Design</a>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Design <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li class="active">
+    <a href="./">Design overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../extending/">Extending readux</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
                 
-                    <li >
-                        <a href="../extending/">Extending</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../tutorial/">Tutorial</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../effective-reagent/">Effective Reagent</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../tutorial/">Tutorial</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -135,12 +159,42 @@
         
             <li class="second-level"><a href="#overview">Overview</a></li>
             
-        
-            <li class="second-level"><a href="#terminology">Terminology</a></li>
+                <li class="third-level"><a href="#the-store-the-model">The store &amp; the model</a></li>
+            
+                <li class="third-level"><a href="#actions-updating-the-model">Actions &amp; Updating the model</a></li>
+            
+                <li class="third-level"><a href="#getting-data-from-the-model">Getting data from the model</a></li>
             
         
-            <li class="second-level"><a href="#of-libraries-and-frameworks">Of libraries and frameworks</a></li>
+            <li class="second-level"><a href="#extending-readux">Extending readux</a></li>
             
+                <li class="third-level"><a href="#of-libraries-and-frameworks">Of libraries and frameworks</a></li>
+            
+                <li class="third-level"><a href="#how-to-extend-readux">How to extend readux</a></li>
+            
+        
+    
+        <li class="first-level "><a href="#reference">Reference</a></li>
+        
+            <li class="second-level"><a href="#action">Action</a></li>
+            
+        
+            <li class="second-level"><a href="#reducer">Reducer</a></li>
+            
+                <li class="third-level"><a href="#writing-simple-reducers">Writing simple reducers</a></li>
+            
+                <li class="third-level"><a href="#combining-reducers">Combining reducers</a></li>
+            
+        
+            <li class="second-level"><a href="#query">Query</a></li>
+            
+                <li class="third-level"><a href="#using-queries">Using queries</a></li>
+            
+                <li class="third-level"><a href="#writing-queries">Writing queries</a></li>
+            
+        
+    
+        <li class="first-level "><a href="#notes">Notes</a></li>
         
     
     </ul>
@@ -149,9 +203,45 @@
 
 <h1 id="design">Design</h1>
 <h2 id="overview">Overview</h2>
-<h2 id="terminology">Terminology</h2>
-<h2 id="of-libraries-and-frameworks">Of libraries and frameworks</h2>
-<p>Readux, like <a href="http://redux.js.org">Redux</a>, is a fairly unopinionated <em>library</em>. 
+<h3 id="the-store-the-model">The store &amp; the model</h3>
+<p>Readux aims to simplify state management by encouraging all state to be managed
+by a <em>store</em> which holds a single entity, which we call the <em>model</em>.</p>
+<p>Generally, we try to <em>normalize</em> the data in the model, that is, to organise it
+in such a way, that everything is described just once.
+This is desirable because a single source of truth means data can't get out of
+sync - we can't have a user profile and the metadata associated a post show
+two different profile pictures for the same user - because everything there is
+to know about the user is described <em>exactly once</em> in our model.</p>
+<h3 id="actions-updating-the-model">Actions &amp; Updating the model</h3>
+<p>The only way to update the model is to dispatch actions against the store.
+An action is merely a keyword (e.g. <code>:add-todo</code>) and some (optional) data.
+The point is for the dispatched actions to describe <em>what happened</em> and have
+the store contain the logic dictating what to do in response to those actions.
+This way, we hope to encourage the separation of application logic from the
+presentation.</p>
+<p>The store needs some way to handle the actions, to deside how the model 
+should be changed to reflect an <code>:add-todo</code> action. That's the job of
+the <em>reducer</em> function.
+The reducer takes two arguments, the old model (i.e. the state of our
+entire application as of this moment) and the action, and from these
+constructs a new model.
+The only important requirement here is that the reducer is <em>pure</em>, that is,
+given the same input, we must always get the same output.</p>
+<h3 id="getting-data-from-the-model">Getting data from the model</h3>
+<p>It's possible to call <code>store-&gt;model</code> on a store to get a (read-only) atom(1).
+However, using that approach is bad for two reasons:</p>
+<p>1) Every component is now aware of, and <em>depends on</em> how our model is structured
+     right now.</p>
+<p>2) We will quite possibly repeat and re-run code which transforms the raw data
+     into a format suitable for our components.</p>
+<p>In readux you're encouraged to use <em>queries</em> to extract data from the store and
+transform it into some format more suitable to for one or more reagent components.
+By writing these query functions, we solve (1) in that changing the structure of
+the store only requires rewriting our queries and (2) because each query should
+only be computed when necessary, more on that later.</p>
+<h2 id="extending-readux">Extending readux</h2>
+<h3 id="of-libraries-and-frameworks">Of libraries and frameworks</h3>
+<p>readux, like <a href="http://redux.js.org">redux</a>, is a fairly unopinionated <em>library</em>. 
 Libraries are limited in scope whereas frameworks are cohesive, thoughtful, but
 <em>prescriptive</em> solutions to a set of problems.
 Frameworks are a great thing when your use-case aligns perfectly with
@@ -169,8 +259,178 @@ to the scale and complexity of your application.
 Even if there were, using a set of libraries means that once some superior
 approach to solving the problem comes along, you can swap out a library
 instead of starting all over in a new framework.</p>
-<p>In summary, Readux doesn't do much, but it's designed to play well with
-other libraries, and that's a good thing(<i class="fa fa-trademark" aria-hidden="true"></i>).</p></div>
+<p>In summary, readux doesn't do much, but it's designed to play well with
+other libraries, and that's a good thing(<i class="fa fa-trademark" aria-hidden="true"></i>).</p>
+<h3 id="how-to-extend-readux">How to extend readux</h3>
+<p>In concrete terms, readux allows writing <a href="../extending/#store-enhancers"><em>store enhancers</em></a> augment the store,
+adding additional functionality like 'queries', debuggers etc and <a href="../extending/#middleware"><em>middleware</em></a>,
+which sits between the call dispatching an action and it being forwarded to the
+reducer.
+Generally, if you mean to simply alter actions on a case-by-case (pure) basis,
+middleware will do. If you need to retain some state, e.g. to store a map of
+registered queries or data related to a debugger, then writing a store enhancer
+is the way to go.</p>
+<h1 id="reference">Reference</h1>
+<h2 id="action">Action</h2>
+<p>Actions in readux follow the structure of <a href="https://github.com/acdlite/flux-standard-action">flux standard actions (FSA)</a>.</p>
+<p>An FSA-action must not have any keys beside <code>:type</code>, <code>:payload</code>, <code>:error</code> and <code>:meta</code>, and only
+<code>:type</code> is required.</p>
+<ul>
+<li><code>:type</code>- the type of the action, e.g. <code>:add-todo</code>, <code>:show-editor</code></li>
+<li><code>:payload</code> - any data which should be sent along with the action.</li>
+<li><code>:error</code><ul>
+<li>optional boolean field</li>
+<li>analguous to a rejected promise (i.e. processing the action failed at some step). </li>
+<li>If <code>:error</code> is set, the <code>:payload</code> should contain an error object describing what went wrong.</li>
+</ul>
+</li>
+<li><code>:meta</code> <ul>
+<li>intended to hold data not directly pertaining to the action.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="clojure">;; Example action.
+{:type :add-todo
+ :payload &quot;Buy milk&quot;}
+</code></pre>
+
+<p>This might seem constricting, but having a standard format makes it simpler to write
+middleware and store enhancers which work on actions - and ultimately makes readux 
+simpler to use since middleware functions the same and interoperate better.</p>
+<h2 id="reducer">Reducer</h2>
+<p><strong>Signature:</strong> <code>model, action -&gt; new-model</code></p>
+<p>A reducer is a function which takes a model and some action, producing from
+them a new model. This might sound complex, but it's actually not, it works
+exactly like <code>(reduce + 0 [1 2 3 4])</code>. The result of <a href="">reduce</a>, <code>10</code> in 
+this case, is the result of continuously using the <code>+</code> function on the
+previous result and the next value in line - and that's exactly how the
+reducer function is meant to work.</p>
+<p>Because of the way reducers can be composed together, there's a few requirements
+which a reducer must meet:</p>
+<ol>
+<li><strong>Purity</strong> - Given the same input (model &amp; action) the reducer must always produce the same result</li>
+<li><strong>Handle nil input</strong> - When the first action is dispatched, the model is initially empty. The reducer must treat a nil-value for a model as a queue to initilize it.</li>
+<li><strong>Return a model</strong> - If an action doesn't apply to the reducer, simply return the model as it was.</li>
+</ol>
+<p>It turns out that obeying these rules means we can build reducers which
+delegates parts of their model to other reducers. But first, let's see
+a simple reducer:</p>
+<h3 id="writing-simple-reducers">Writing simple reducers</h3>
+<p>Here's a small example reducer for a counter:</p>
+<pre><code class="clojure">(defn counter-reducer 
+  [model action]
+  (let [model (or model {:value 0})] ;; initialize if needed
+    (case (:type action)
+      :increment (update model :value inc)
+      :decrement (update model :value dec)
+      model))) ;; return model (i.e. no change) as a fall-back
+</code></pre>
+
+<p>Notice how the original model is returned if the action was neither 
+<code>:increment</code> nor <code>:decrement</code>. Also notice how <code>model</code> is initialised if a nil
+value is received.</p>
+<p>Reducers of this kind are common, that's why readux provides <code>reducer-fn</code> to
+help writing reducers which handle requirements 2 &amp; 3.</p>
+<pre><code class="clojure">(def counter-reducer
+  (reducer-fn
+    [model action]
+    {:value 0}
+    {:increment (update model :value inc)
+     :decrement (update model :value dec)}))
+</code></pre>
+
+<h3 id="combining-reducers">Combining reducers</h3>
+<p><strong>TODO</strong> Write an example.</p>
+<h2 id="query">Query</h2>
+<p>Consider a blog post which shows the name, a blurp and a profile picture of the
+author - we don't wan't to store this with every post - we want a single source
+of truth such that a new profile picture requires one change to be reflected
+across the page.
+That means we'll tend to normalize our data and have a model like so:</p>
+<pre><code>{:users {0 {:name &quot;Bob&quot;
+            :avatar &quot;http......&quot;}
+         1 {:name &quot;Sarah&quot;
+            :avatar &quot;http......&quot;}}
+ :posts {100 {:author 0
+              :title &quot;On the duplicitous nature of cats&quot;
+              :text &quot;....&quot;}
+         101 {:author 1
+              :title &quot;Monads are for newbs&quot;
+              :text &quot;....&quot;}
+         102 {:author 1
+              :title &quot;Winter 2016 Anime List&quot;
+              :text &quot;...&quot;}}}
+</code></pre>
+
+<p>In Readux, you're encouraged to use <em>queries</em>, which are functions operating
+on the store, producing some output which fits the needs of one or some 
+components.</p>
+<h3 id="using-queries">Using queries</h3>
+<p>E.g., for our posts component, we might have a query 'fetch-post &lt;id&gt;'
+which produces:</p>
+<pre><code class="clojure">(rdc/query store [:fetch-post 101])
+;;=&gt;
+{:author {:name &quot;Sarah&quot;
+          :avatar &quot;http....&quot;}
+ :id 101
+ :title &quot;Monads are for newbs&quot;
+ :text &quot;&quot;}
+</code></pre>
+
+<p>That is, queries are used to:</p>
+<ol>
+<li>Avoid coupling the structure of the store to each component which reads from it</li>
+<li>Avoid re-running the computation required to transform the data more often than necessary (i.e. run when the model changes).</li>
+</ol>
+<h3 id="writing-queries">Writing queries</h3>
+<p>Continuing from the example above, let's actually implement it. Adding a new
+query takes two steps; defining the query function and registering it with the
+store.</p>
+<h4 id="writing-the-query-function">Writing the query function</h4>
+<pre><code class="clojure">;; Example: defining the `post` query.
+(defn post-query
+  [model [query-id post-id]]
+  (assert (= query-id :fetch-post))
+  (let [users (reaction (:users @model))
+        posts (reaction (:posts @model))]
+    (-&gt; (get @posts post-id)
+        (update :author #(get @users %))
+        (reaction))))
+</code></pre>
+
+<p>Notice how we start by extracting two smaller parts of the model, <code>:users</code> and
+<code>:posts</code> from the model into separate reactions before transforming the data
+into the form we'd like to use.
+This leverages the nature of reactions to ensure our query is only re-run if
+the content of the <code>:posts</code> or <code>:users</code> fields change - in this way, we can
+scale our queries to work well even in applications with a gigantic model which
+gets updated very frequently. Our query only gets re-run when the subtrees
+<code>:posts</code> or <code>:users</code> change in the model.</p>
+<p>This example is somewhat contrived; our query is simple and it likely won't
+matter much. The point, however, is that expensive queries such as sorting a
+set of items or say, rendering post content stored as markdown into HTML,
+can be tweaked to run only when necessary by making them depend on
+reactions which expose only the data they should operate on.</p>
+<h4 id="registering-the-query-with-the-store">Registering the query with the store</h4>
+<p>Secondly, the query needs to be registered with the store:</p>
+<pre><code class="clojure">;; Registering the 'post' query with the store.
+(rdc/query-reg! store :post fetch-post-query)
+</code></pre>
+
+<p>Notice how we register the query under an id (in this case, <code>:post</code>). This is
+the id we use to refer to the query from within our components when we
+write something like <code>(rdc/query store [:fetch-post 101])</code>.</p>
+<p>Because you typically want to register a lot of queries right away, readux
+provides a helper function, <code>queries-reg!</code>:</p>
+<pre><code class="clojure">(queries-reg! {:post post-query
+               :posts posts-index-query})
+</code></pre>
+
+<h1 id="notes">Notes</h1>
+<p>1) Technically a <code>reaction</code> - think of it as a atom that can do an arbitrary
+   calculation which is only re-done when the data it depends on changes
+   underneath it. Because we just return the model, it effectively works as
+   a read-only atom.</p></div>
         
     </div>
 

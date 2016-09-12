@@ -7,8 +7,9 @@ applications already using [reagent](https://github.com/reagent-project/reagent)
 This project is very new and the documentation you see is a first pass - certain examples mentioned in passing
 (handling promises, spec validation, debugger) will become projects in their own right very soon.
 
-Also, if you have a great idea, go ahead and implement it - if it's suitably open (e.g. MIT/BSD), we will
-happily mention it in these docs :)
+Also, if you have a great idea, go ahead and implement it I will happily
+mention your project in the docs :) -- Well, provided it is suitably open
+(e.g. MIT/BSD/Eclipse Public License).
 
 ## Short(ish) description
 Readux aims to simplify state management by encouraging all state to be managed by a *store* which holds a single entity, which we

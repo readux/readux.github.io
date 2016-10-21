@@ -146,21 +146,140 @@ Notice how the original model is returned if the action was neither
 `:increment` nor `:decrement`. Also notice how `model` is initialised if a nil
 value is received.
 
-Reducers of this kind are common, that's why readux provides `reducer-fn` to
+Reducers of this kind are common, that's why readux provides `reducer` to
 help writing reducers which handle requirements 2 & 3.
 
 ```clojure
 (def counter-reducer
-  (reducer-fn
-    [model action]
+  (rdc/reducer
     {:value 0}
-    {:increment (update model :value inc)
-     :decrement (update model :value dec)}))
+    {:increment (fn [model action]
+                  (update model :value inc))
+     :decrement (fn [model action]
+                  (update model :value dec))}))
 ```
 
 ### Combining reducers
+Let's assume we're making a simple todo application.
 
-**TODO** Write an example.
+Assume we want to build a todo application. We might want two reducers, one
+managing a list of todos (each represented as a map) and another managing
+a display filter - which allows us to display all, only completed or active
+todos.
+
+```clojure
+(def todo-reducer
+  (rdc/reducer
+  {:todos [{:id 1
+            :text "read the readux tutorial"
+            :completed false}]}
+  todo-actions))
+
+(def filter-reducer
+  (rdc/reducer
+  :show-all
+  filter-actions))
+```
+
+#### A composite reducer
+Let's say we want the model state to look like so:
+
+```clojure
+{:todos [{:id 1
+          :text "read readux tutorial"
+          :completed false}]
+ :filter :show-all}
+```
+
+While we could rewrite our two reducers into one big reducer, manually handling
+the creation of the nested map that is our model, that would be wasted effort.
+
+Instead, we can make a reducer, which is the two other reducers composed:
+
+```clojure
+(def app-reducer
+  (rdc/composite-reducer
+    {:todos  todo-reducer
+     :filter filter-reducer}))
+```
+
+#### A composite reducer - described as data
+`composite-reducer` also allows you to forego defining each individual reducer.
+After all, reducers just require an initial model and a set of actions. So we
+could also define our composite reducer like so:
+
+```clojure
+(def app-reducer
+  (rdc/composite-reducer
+    {:todos  {:init {:todos []
+                     :filter :show-all}
+              :actions todo-actions}
+     :filter {:init :show-all
+              :actions filter-actions}}))
+```
+
+This turns out to be especially helpful in larger apps where the app reducer
+consists of many smaller reducers composed together.
+
+#### Nested Composite Reducers
+The result of calling `composite-reducer`is itself a reducer, so it's possible
+to keep nesting reducers as desired. However, having these strewn about as
+separate `def`'s in our source-code makes it difficult to see which part of the
+model they manage.
+
+However, `composite-reducer` allows you to write a deeply nested tree of
+reducers as one big map - making it much easier to visually discern which part
+of the model a given reducer manages.
+
+Let's assume we wanted to expand our todo app to managing multiple todo lists,
+one for each project. In that case, we may want the state to be:
+
+```clojure
+{:projects
+ {:work
+  {:label "Work Todos"
+   :todos
+   [{:id 1
+     :text "read readux tutorial"
+     :completed false}]
+   :filter :show-all}
+  :home
+  {:label "House Chores"
+   :todos
+   [{:id 1
+     :text "locate source of smell in the fridge"
+     :completed false}]
+   :filter :show-active}}
+ :filter #(:work :home)}
+```
+
+With `composite-reducer` we can express that like so:
+
+```clojure
+(def app-reducer
+  (rdc/composite-reducer
+    {:projects
+     {:work {:init todo-model
+             :actions todo-actions
+             :ctx :work}
+      :home {:init todo-model
+             :actions todo-actions
+             :ctx :home}}
+     :filter project-filter-reducer}))
+```
+
+`composite-reducer` automatically recognizes that the map supplied to `:projects`
+isn't meant to be a reducer (it's lacking `:init` & `:actions`) - so it treats
+it as a composite reducer in its own right.
+
+Note that you can take this as far as you want, and note how our app's reducer
+visually resembles the model we want it to manage :)
+
+You may have noticed the `:ctx` key in both maps describing the reducers for
+the work- and personal todo-lists.
+Context essentially allows use to reuse the same actions and components in a
+different part of the application (*context*) and is a mechanism for
+facilitating reuse.
 
 ## Query
 Consider a blog post which shows the name, a blurp and a profile picture of the
@@ -201,8 +320,6 @@ which produces:
  :title "Monads are for newbs"
  :text ""}
 ```
-
-
 
 That is, queries are used to:
 
@@ -259,6 +376,18 @@ provides a helper function, `queries-reg!`:
 (queries-reg! {:post post-query
                :posts posts-index-query})
 ```
+
+## Context - reusing work
+Note that we use the `:ctx` key to set a context for the two reducers
+managing a set of todos. We do this to differentiate between `:add-todo` actions
+operating on our "Work" todo-list from our house chores.
+
+Context is used to prefix actions with a unique namespace, this ensures that an
+`:add-todo` action that is dispatched is only processed by the intended todo-list.
+
+Reusing components and dispatching actions in the right context, is what allows
+reusing components multiple places in an application - this is covered in the
+section on [context](#context-reusing-work).
 
 # Notes
 

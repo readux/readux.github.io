@@ -107,7 +107,45 @@ An FSA-action must not have any keys beside `:type`, `:payload`, `:error` and `:
 
 This might seem constricting, but having a standard format makes it simpler to write
 middleware and store enhancers which work on actions - and ultimately makes readux 
-simpler to use since middleware functions the same and interoperate better.
+simpler to use since middleware becomes more readily composable.
+
+## Action Maps
+Reducers, covered in detail below, act on the model in response to incoming actions.
+
+To do that, the reducer will accept a map, which map actions (by their type) to
+a corresponding function. Think of an action map as a series of "if X, then do Y".
+If this seems
+
+Suppose our application has a counter which can be incremented or decremented
+by one - the application's model looks like so:
+
+```clojure
+{:counter 0}
+```
+
+Asuming we name the increment and decrement actions `:increment` and `:decrement`
+respectively, our action map would look something like this:
+
+```clojure
+{:increment
+ (fn [model action]
+   (update model :counter inc))
+ :decrement
+ (fn [model action]
+   (update model :counter dec))}
+```
+
+### Tip: Reuse your action maps!
+It will take a while to fully appreciate, but wrapping our actions into a map
+will prove helpful later when building reducers and later still when making
+sets of components to be reused across the application.
+
+Imagine two forms sharing 
+
+, as can be merged (allowing 
+reuse of identical subsets of functionality) and their keys can be mangled
+to contextualize actions - meaning not all counters are updated whenever
+an `:increment` action is dispatched.
 
 ## Reducer 
 **Signature:** `model, action -> new-model`

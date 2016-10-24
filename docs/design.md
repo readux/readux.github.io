@@ -416,16 +416,110 @@ provides a helper function, `queries-reg!`:
 ```
 
 ## Context - reusing work
-Note that we use the `:ctx` key to set a context for the two reducers
-managing a set of todos. We do this to differentiate between `:add-todo` actions
-operating on our "Work" todo-list from our house chores.
+Sometimes we create a piece of functionality which we'd like to reuse in
+different parts of the application.Examples would be a standardized yes/no
+modal, a document editor, or maybe just a nicely styled drop-down menu with
+fuzzy search completion.
 
-Context is used to prefix actions with a unique namespace, this ensures that an
-`:add-todo` action that is dispatched is only processed by the intended todo-list.
+In traditional GUI-frameworks, larger composite widgets could be made from
+smaller base-widgets, their internal events properly connected and exposed
+as a single widget.
 
-Reusing components and dispatching actions in the right context, is what allows
-reusing components multiple places in an application - this is covered in the
-section on [context](#context-reusing-work).
+Readux allows the same style of reuse through the concept of *context*.
+Contextualising does two things:
+
+  1. on dispatch, actions whose type lack a context, are prefixed with the context
+    * e.g. given context `:work-list`, `:add-todo` becomes `:work-list/add-todo`.
+    * NOTE: already contextualized actions, e.g. `:app/login` won't be altered.
+  2. queries lacking a context, are prefixed with the context
+    * e.g. given context `:work-list`, `:todos` becomes `:work-list/todos`.
+    * NOTE: already contextualized queries, e.g. `:projects/list`, won't be altered.
+
+Think of action types and query id's as akin to pathnames on a unix system.
+If the keyword lacks a namespace, they are *relative* to whatever context the
+component is used in.
+If the keyword has a namespace, it's like an absolute path and will resolve
+to the same thing regardless of the context in which the component is used.
+
+To accomplish this, the `query` and `dispatch` functions are passed directly to
+the component. The interface mirrors their respective functions except the
+`store` argument is omitted.
+
+It's perfectly possible to write reusable components without contextualising
+them. Though if you do so, your components will need to receive a series of
+callbacks for the dispatches and queries needed.
+The drawback of that model is most noticable when components are nested in
+eachother, though for relatively simple, flat components, it's a viable
+alternative.
+
+### Contextualising a component
+To contextualize a component, use `readux.core/connect`. `connect` takes
+a component, a store, the context and a path into the model.
+
+Note that readux doesn't enforce any link between context and path into
+the model - different reducers, and thus different parts of the model,
+may want to react to the same action.
+
+However, you generally want to ensure that the path to the reducer reacting
+to (the contextualized) actions dispatched from the component matching the
+path given to the connected component.  
+
+```
+;; Connect component 'counter-ctrl' to context ':counter1' operating
+;; on the data (get-in model [:counters :1])
+(rdc/connect counter-ctrl store :counter1 [:counters :1])
+```
+
+### Example - multiple counters
+The code snippets below are extracted from the readux "counter" example.
+
+Examine the [full source](https://github.com/readux/readux/tree/master/examples/counters),
+check it out and issue `boot dev` to run it. Keep in mind, the example
+contains additional comments.
+
+
+Given a reducer managing two counters:
+
+```clojure
+(def app-reducer
+  (rdc/composite-reducer
+    {:counters
+     {:1 {:init {:counter 11}
+          :actions counter-actions
+          :ctx :counter1}
+      :2 {:init {:counter 20}
+          :actions counter-actions
+          :ctx :counter2}}
+     :num-actions num-actions-reducer}))
+```
+
+We create a controller component, that is, a component wires up our
+presentational component(s) to our application logic. In this case
+by making some action dispatch and query callbacks.
+
+```clojure
+(defn counter-ctrl
+  [dispatch query]
+  (let [value (query [:counter-value])
+        on-inc #(dispatch {:type :incr})
+        on-dec #(dispatch {:type :decr})]
+    [counter value on-inc on-dec]))
+```
+
+Finally, we connect two counters to different contexts and display them both:
+
+```clojure
+(defn- app
+  [store]
+  (let [counter1 (rdc/connect counter-ctrl store :counter1 [:counters :1])
+        counter2 (rdc/connect counter-ctrl store :counter2 [:counters :2])
+        num-actions (rdc/query store [:num-actions])]
+    (fn app-render []
+      [:div
+       [counter1]
+       [counter2]
+       [:p (str "processed '" @num-actions "' actions so far.")]])))
+```
 
 # Notes
 

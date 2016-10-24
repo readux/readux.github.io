@@ -18,6 +18,12 @@
     </url>
         
     <url>
+     <loc>None/reference/</loc>
+     <lastmod>2016-10-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>None/extending/</loc>
      <lastmod>2016-10-24</lastmod>
      <changefreq>daily</changefreq>

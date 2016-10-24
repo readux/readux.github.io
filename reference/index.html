@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    <title>Reference Documentation - Readux Documentation</title>
+
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/cinder.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/highlight.css">
+
+
+    <link href="../extra/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">Readux Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../design/">Design overview</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Reference Documentation</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../extending/">Extending readux</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../effective-reagent/">Effective Reagent</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../tutorial/">Tutorial</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../design/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../extending/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/readux/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="first-level active"><a href="#reference">Reference</a></li>
+        
+            <li class="second-level"><a href="#action">Action</a></li>
+            
+        
+            <li class="second-level"><a href="#action-maps">Action Maps</a></li>
+            
+                <li class="third-level"><a href="#tip-reuse-your-action-maps">Tip: Reuse your action maps!</a></li>
+            
+        
+            <li class="second-level"><a href="#reducer">Reducer</a></li>
+            
+                <li class="third-level"><a href="#writing-simple-reducers">Writing simple reducers</a></li>
+            
+                <li class="third-level"><a href="#combining-reducers">Combining reducers</a></li>
+            
+        
+            <li class="second-level"><a href="#query">Query</a></li>
+            
+                <li class="third-level"><a href="#using-queries">Using queries</a></li>
+            
+                <li class="third-level"><a href="#writing-queries">Writing queries</a></li>
+            
+        
+            <li class="second-level"><a href="#context-reusing-work">Context - reusing work</a></li>
+            
+                <li class="third-level"><a href="#contextualising-a-component">Contextualising a component</a></li>
+            
+                <li class="third-level"><a href="#example-multiple-counters">Example - multiple counters</a></li>
+            
+        
+    
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="reference">Reference</h1>
+<h2 id="action">Action</h2>
+<p>Actions in readux follow the structure of <a href="https://github.com/acdlite/flux-standard-action">flux standard actions (FSA)</a>.</p>
+<p>An FSA-action must not have any keys beside <code>:type</code>, <code>:payload</code>, <code>:error</code> and <code>:meta</code>, and only
+<code>:type</code> is required.</p>
+<ul>
+<li><code>:type</code>- the type of the action, e.g. <code>:add-todo</code>, <code>:show-editor</code></li>
+<li><code>:payload</code> - any data which should be sent along with the action.</li>
+<li><code>:error</code><ul>
+<li>optional boolean field</li>
+<li>analguous to a rejected promise (i.e. processing the action failed at some step). </li>
+<li>If <code>:error</code> is set, the <code>:payload</code> should contain an error object describing what went wrong.</li>
+</ul>
+</li>
+<li><code>:meta</code> <ul>
+<li>intended to hold data not directly pertaining to the action.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="clojure">;; Example action.
+{:type :add-todo
+ :payload &quot;Buy milk&quot;}
+</code></pre>
+
+<p>This might seem constricting, but having a standard format makes it simpler to write
+middleware and store enhancers which work on actions - and ultimately makes readux 
+simpler to use since middleware becomes more readily composable.</p>
+<h2 id="action-maps">Action Maps</h2>
+<p>Reducers, covered in detail below, act on the model in response to incoming actions.</p>
+<p>To do that, the reducer will accept a map, which map actions (by their type) to
+a corresponding function. Think of an action map as a series of "if X, then do Y".
+If this seems</p>
+<p>Suppose our application has a counter which can be incremented or decremented
+by one - the application's model looks like so:</p>
+<pre><code class="clojure">{:counter 0}
+</code></pre>
+
+<p>Asuming we name the increment and decrement actions <code>:increment</code> and <code>:decrement</code>
+respectively, our action map would look something like this:</p>
+<pre><code class="clojure">{:increment
+ (fn [model action]
+   (update model :counter inc))
+ :decrement
+ (fn [model action]
+   (update model :counter dec))}
+</code></pre>
+
+<h3 id="tip-reuse-your-action-maps">Tip: Reuse your action maps!</h3>
+<p>It will take a while to fully appreciate, but wrapping our actions into a map
+will prove helpful later when building reducers and later still when making
+sets of components to be reused across the application.</p>
+<p>Imagine two forms sharing </p>
+<p>, as can be merged (allowing 
+reuse of identical subsets of functionality) and their keys can be mangled
+to contextualize actions - meaning not all counters are updated whenever
+an <code>:increment</code> action is dispatched.</p>
+<h2 id="reducer">Reducer</h2>
+<p><strong>Signature:</strong> <code>model, action -&gt; new-model</code></p>
+<p>A reducer is a function which takes a model and some action, producing from
+them a new model. This might sound complex, but it's actually not, it works
+exactly like <code>(reduce + 0 [1 2 3 4])</code>. The result of <a href="">reduce</a>, <code>10</code> in 
+this case, is the result of continuously using the <code>+</code> function on the
+previous result and the next value in line - and that's exactly how the
+reducer function is meant to work.</p>
+<p>Because of the way reducers can be composed together, there's a few requirements
+which a reducer must meet:</p>
+<ol>
+<li><strong>Purity</strong> - Given the same input (model &amp; action) the reducer must always produce the same result</li>
+<li><strong>Handle nil input</strong> - When the first action is dispatched, the model is initially empty. The reducer must treat a nil-value for a model as a queue to initilize it.</li>
+<li><strong>Return a model</strong> - If an action doesn't apply to the reducer, simply return the model as it was.</li>
+</ol>
+<p>It turns out that obeying these rules means we can build reducers which
+delegates parts of their model to other reducers. But first, let's see
+a simple reducer:</p>
+<h3 id="writing-simple-reducers">Writing simple reducers</h3>
+<p>Here's a small example reducer for a counter:</p>
+<pre><code class="clojure">(defn counter-reducer 
+  [model action]
+  (let [model (or model {:value 0})] ;; initialize if needed
+    (case (:type action)
+      :increment (update model :value inc)
+      :decrement (update model :value dec)
+      model))) ;; return model (i.e. no change) as a fall-back
+</code></pre>
+
+<p>Notice how the original model is returned if the action was neither 
+<code>:increment</code> nor <code>:decrement</code>. Also notice how <code>model</code> is initialised if a nil
+value is received.</p>
+<p>Reducers of this kind are common, that's why readux provides <code>reducer</code> to
+help writing reducers which handle requirements 2 &amp; 3.</p>
+<pre><code class="clojure">(def counter-reducer
+  (rdc/reducer
+    {:value 0}
+    {:increment (fn [model action]
+                  (update model :value inc))
+     :decrement (fn [model action]
+                  (update model :value dec))}))
+</code></pre>
+
+<h3 id="combining-reducers">Combining reducers</h3>
+<p>Let's assume we're making a simple todo application.</p>
+<p>Assume we want to build a todo application. We might want two reducers, one
+managing a list of todos (each represented as a map) and another managing
+a display filter - which allows us to display all, only completed or active
+todos.</p>
+<pre><code class="clojure">(def todo-reducer
+  (rdc/reducer
+  {:todos [{:id 1
+            :text &quot;read the readux tutorial&quot;
+            :completed false}]}
+  todo-actions))
+
+(def filter-reducer
+  (rdc/reducer
+  :show-all
+  filter-actions))
+</code></pre>
+
+<h4 id="a-composite-reducer">A composite reducer</h4>
+<p>Let's say we want the model state to look like so:</p>
+<pre><code class="clojure">{:todos [{:id 1
+          :text &quot;read readux tutorial&quot;
+          :completed false}]
+ :filter :show-all}
+</code></pre>
+
+<p>While we could rewrite our two reducers into one big reducer, manually handling
+the creation of the nested map that is our model, that would be wasted effort.</p>
+<p>Instead, we can make a reducer, which is the two other reducers composed:</p>
+<pre><code class="clojure">(def app-reducer
+  (rdc/composite-reducer
+    {:todos  todo-reducer
+     :filter filter-reducer}))
+</code></pre>
+
+<h4 id="a-composite-reducer-described-as-data">A composite reducer - described as data</h4>
+<p><code>composite-reducer</code> also allows you to forego defining each individual reducer.
+After all, reducers just require an initial model and a set of actions. So we
+could also define our composite reducer like so:</p>
+<pre><code class="clojure">(def app-reducer
+  (rdc/composite-reducer
+    {:todos  {:init {:todos []
+                     :filter :show-all}
+              :actions todo-actions}
+     :filter {:init :show-all
+              :actions filter-actions}}))
+</code></pre>
+
+<p>This turns out to be especially helpful in larger apps where the app reducer
+consists of many smaller reducers composed together.</p>
+<h4 id="nested-composite-reducers">Nested Composite Reducers</h4>
+<p>The result of calling <code>composite-reducer</code>is itself a reducer, so it's possible
+to keep nesting reducers as desired. However, having these strewn about as
+separate <code>def</code>'s in our source-code makes it difficult to see which part of the
+model they manage.</p>
+<p>However, <code>composite-reducer</code> allows you to write a deeply nested tree of
+reducers as one big map - making it much easier to visually discern which part
+of the model a given reducer manages.</p>
+<p>Let's assume we wanted to expand our todo app to managing multiple todo lists,
+one for each project. In that case, we may want the state to be:</p>
+<pre><code class="clojure">{:projects
+ {:work
+  {:label &quot;Work Todos&quot;
+   :todos
+   [{:id 1
+     :text &quot;read readux tutorial&quot;
+     :completed false}]
+   :filter :show-all}
+  :home
+  {:label &quot;House Chores&quot;
+   :todos
+   [{:id 1
+     :text &quot;locate source of smell in the fridge&quot;
+     :completed false}]
+   :filter :show-active}}
+ :filter #(:work :home)}
+</code></pre>
+
+<p>With <code>composite-reducer</code> we can express that like so:</p>
+<pre><code class="clojure">(def app-reducer
+  (rdc/composite-reducer
+    {:projects
+     {:work {:init todo-model
+             :actions todo-actions
+             :ctx :work}
+      :home {:init todo-model
+             :actions todo-actions
+             :ctx :home}}
+     :filter project-filter-reducer}))
+</code></pre>
+
+<p><code>composite-reducer</code> automatically recognizes that the map supplied to <code>:projects</code>
+isn't meant to be a reducer (it's lacking <code>:init</code> &amp; <code>:actions</code>) - so it treats
+it as a composite reducer in its own right.</p>
+<p>Note that you can take this as far as you want, and note how our app's reducer
+visually resembles the model we want it to manage :)</p>
+<p>You may have noticed the <code>:ctx</code> key in both maps describing the reducers for
+the work- and personal todo-lists.
+Context essentially allows use to reuse the same actions and components in a
+different part of the application (<em>context</em>) and is a mechanism for
+facilitating reuse.</p>
+<h2 id="query">Query</h2>
+<p>Consider a blog post which shows the name, a blurp and a profile picture of the
+author - we don't wan't to store this with every post - we want a single source
+of truth such that a new profile picture requires one change to be reflected
+across the page.
+That means we'll tend to normalize our data and have a model like so:</p>
+<pre><code>{:users {0 {:name &quot;Bob&quot;
+            :avatar &quot;http......&quot;}
+         1 {:name &quot;Sarah&quot;
+            :avatar &quot;http......&quot;}}
+ :posts {100 {:author 0
+              :title &quot;On the duplicitous nature of cats&quot;
+              :text &quot;....&quot;}
+         101 {:author 1
+              :title &quot;Monads are for newbs&quot;
+              :text &quot;....&quot;}
+         102 {:author 1
+              :title &quot;Winter 2016 Anime List&quot;
+              :text &quot;...&quot;}}}
+</code></pre>
+
+<p>In Readux, you're encouraged to use <em>queries</em>, which are functions operating
+on the store, producing some output which fits the needs of one or some 
+components.</p>
+<h3 id="using-queries">Using queries</h3>
+<p>E.g., for our posts component, we might have a query 'fetch-post &lt;id&gt;'
+which produces:</p>
+<pre><code class="clojure">(rdc/query store [:fetch-post 101])
+;;=&gt;
+{:author {:name &quot;Sarah&quot;
+          :avatar &quot;http....&quot;}
+ :id 101
+ :title &quot;Monads are for newbs&quot;
+ :text &quot;&quot;}
+</code></pre>
+
+<p>That is, queries are used to:</p>
+<ol>
+<li>Avoid coupling the structure of the store to each component which reads from it</li>
+<li>Avoid re-running the computation required to transform the data more often than necessary (i.e. run when the model changes).</li>
+</ol>
+<h3 id="writing-queries">Writing queries</h3>
+<p>Continuing from the example above, let's actually implement it. Adding a new
+query takes two steps; defining the query function and registering it with the
+store.</p>
+<h4 id="writing-the-query-function">Writing the query function</h4>
+<pre><code class="clojure">;; Example: defining the `post` query.
+(defn post-query
+  [model [query-id post-id]]
+  (assert (= query-id :fetch-post))
+  (let [users (reaction (:users @model))
+        posts (reaction (:posts @model))]
+    (-&gt; (get @posts post-id)
+        (update :author #(get @users %))
+        (reaction))))
+</code></pre>
+
+<p>Notice how we start by extracting two smaller parts of the model, <code>:users</code> and
+<code>:posts</code> from the model into separate reactions before transforming the data
+into the form we'd like to use.
+This leverages the nature of reactions to ensure our query is only re-run if
+the content of the <code>:posts</code> or <code>:users</code> fields change - in this way, we can
+scale our queries to work well even in applications with a gigantic model which
+gets updated very frequently. Our query only gets re-run when the subtrees
+<code>:posts</code> or <code>:users</code> change in the model.</p>
+<p>This example is somewhat contrived; our query is simple and it likely won't
+matter much. The point, however, is that expensive queries such as sorting a
+set of items or say, rendering post content stored as markdown into HTML,
+can be tweaked to run only when necessary by making them depend on
+reactions which expose only the data they should operate on.</p>
+<h4 id="registering-the-query-with-the-store">Registering the query with the store</h4>
+<p>Secondly, the query needs to be registered with the store:</p>
+<pre><code class="clojure">;; Registering the 'post' query with the store.
+(rdc/query-reg! store :post fetch-post-query)
+</code></pre>
+
+<p>Notice how we register the query under an id (in this case, <code>:post</code>). This is
+the id we use to refer to the query from within our components when we
+write something like <code>(rdc/query store [:fetch-post 101])</code>.</p>
+<p>Because you typically want to register a lot of queries right away, readux
+provides a helper function, <code>queries-reg!</code>:</p>
+<pre><code class="clojure">(queries-reg! {:post post-query
+               :posts posts-index-query})
+</code></pre>
+
+<h2 id="context-reusing-work">Context - reusing work</h2>
+<p>Sometimes we create a piece of functionality which we'd like to reuse in
+different parts of the application.Examples would be a standardized yes/no
+modal, a document editor, or maybe just a nicely styled drop-down menu with
+fuzzy search completion.</p>
+<p>In traditional GUI-frameworks, larger composite widgets could be made from
+smaller base-widgets, their internal events properly connected and exposed
+as a single widget.</p>
+<p>Readux allows the same style of reuse through the concept of <em>context</em>.
+Contextualising does two things:</p>
+<ol>
+<li>on dispatch, actions whose type lack a context, are prefixed with the context<ul>
+<li>e.g. given context <code>:work-list</code>, <code>:add-todo</code> becomes <code>:work-list/add-todo</code>.</li>
+<li>NOTE: already contextualized actions, e.g. <code>:app/login</code> won't be altered.</li>
+</ul>
+</li>
+<li>queries lacking a context, are prefixed with the context<ul>
+<li>e.g. given context <code>:work-list</code>, <code>:todos</code> becomes <code>:work-list/todos</code>.</li>
+<li>NOTE: already contextualized queries, e.g. <code>:projects/list</code>, won't be altered.</li>
+</ul>
+</li>
+</ol>
+<p>Think of action types and query id's as akin to pathnames on a unix system.
+If the keyword lacks a namespace, they are <em>relative</em> to whatever context the
+component is used in.
+If the keyword has a namespace, it's like an absolute path and will resolve
+to the same thing regardless of the context in which the component is used.</p>
+<p>To accomplish this, the <code>query</code> and <code>dispatch</code> functions are passed directly to
+the component. The interface mirrors their respective functions except the
+<code>store</code> argument is omitted.</p>
+<p>It's perfectly possible to write reusable components without contextualising
+them. Though if you do so, your components will need to receive a series of
+callbacks for the dispatches and queries needed.
+The drawback of that model is most noticable when components are nested in
+eachother, though for relatively simple, flat components, it's a viable
+alternative.</p>
+<h3 id="contextualising-a-component">Contextualising a component</h3>
+<p>To contextualize a component, use <code>readux.core/connect</code>. <code>connect</code> takes
+a component, a store, the context and a path into the model.</p>
+<p>Note that readux doesn't enforce any link between context and path into
+the model - different reducers, and thus different parts of the model,
+may want to react to the same action.</p>
+<p>However, you generally want to ensure that the path to the reducer reacting
+to (the contextualized) actions dispatched from the component matching the
+path given to the connected component.  </p>
+<pre><code>;; Connect component 'counter-ctrl' to context ':counter1' operating
+;; on the data (get-in model [:counters :1])
+(rdc/connect counter-ctrl store :counter1 [:counters :1])
+</code></pre>
+
+<h3 id="example-multiple-counters">Example - multiple counters</h3>
+<p>The code snippets below are extracted from the readux "counter" example.</p>
+<p>Examine the <a href="https://github.com/readux/readux/tree/master/examples/counters">full source</a>,
+check it out and issue <code>boot dev</code> to run it. Keep in mind, the example
+contains additional comments.</p>
+<p>Given a reducer managing two counters:</p>
+<pre><code class="clojure">(def app-reducer
+  (rdc/composite-reducer
+    {:counters
+     {:1 {:init {:counter 11}
+          :actions counter-actions
+          :ctx :counter1}
+      :2 {:init {:counter 20}
+          :actions counter-actions
+          :ctx :counter2}}
+     :num-actions num-actions-reducer}))
+</code></pre>
+
+<p>We create a controller component, that is, a component wires up our
+presentational component(s) to our application logic. In this case
+by making some action dispatch and query callbacks.</p>
+<pre><code class="clojure">(defn counter-ctrl
+  [dispatch query]
+  (let [value (query [:counter-value])
+        on-inc #(dispatch {:type :incr})
+        on-dec #(dispatch {:type :decr})]
+    [counter value on-inc on-dec]))
+</code></pre>
+
+<p>Finally, we connect two counters to different contexts and display them both:</p>
+<pre><code class="clojure">(defn- app
+  [store]
+  (let [counter1 (rdc/connect counter-ctrl store :counter1 [:counters :1])
+        counter2 (rdc/connect counter-ctrl store :counter2 [:counters :2])
+        num-actions (rdc/query store [:num-actions])]
+    (fn app-render []
+      [:div
+       [counter1]
+       [counter2]
+       [:p (str &quot;processed '&quot; @num-actions &quot;' actions so far.&quot;)]])))
+</code></pre></div>
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+    </footer>
+
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    var base_url = '..';
+    </script>
+    <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+    <script src="../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+</html>

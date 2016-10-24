@@ -74,12 +74,18 @@
                 
                 
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Design <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
 <li >
     <a href="../design/">Design overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../reference/">Reference Documentation</a>
 </li>
 
                         
@@ -125,7 +131,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../design/">
+                        <a rel="next" href="../reference/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -157,6 +163,12 @@
     
         <li class="first-level active"><a href="#extending-readux">Extending Readux</a></li>
         
+            <li class="second-level"><a href="#of-libraries-and-frameworks">Of libraries and frameworks</a></li>
+            
+        
+            <li class="second-level"><a href="#how-to-extend-readux">How to extend readux</a></li>
+            
+        
             <li class="second-level"><a href="#middleware">Middleware</a></li>
             
                 <li class="third-level"><a href="#example-handling-promises">Example: Handling Promises</a></li>
@@ -184,10 +196,38 @@
 
 <h1 id="extending-readux">Extending Readux</h1>
 <p>This document assumes familiarity with what's written intended
-<a href="../design/">the design</a>, which explains the rationale and introduces core
-terminology.</p>
-<p>In general, Readux is intended to be extended through middleware and store
-enhancers, both of which are described below.</p>
+the <a href="../design/">design overview</a> and <a href="../reference/">reference</a> pages, 
+which explain the rationale and introduces core terminology.</p>
+<h2 id="of-libraries-and-frameworks">Of libraries and frameworks</h2>
+<p>readux, like <a href="http://redux.js.org">redux</a>, is a fairly unopinionated <em>library</em>. 
+Libraries are limited in scope whereas frameworks are cohesive, thoughtful, but
+<em>prescriptive</em> solutions to a set of problems.
+Frameworks are a great thing when your use-case aligns perfectly with
+what the authors intended - less so when you're fighting them to achieve
+something not envisioned or catered to.</p>
+<p>Conversely, libraries are concerned with solving a relatively small problem
+and you're left to assemble the libraries needed to solve your problem.
+The upside is that you can tailor a solution matching the problem.</p>
+<p>For example, the Redux community has multiple takes on managing async
+requests, from <a href="https://github.com/gaearon/redux-thunk">thunks</a> to 
+<a href="https://github.com/acdlite/redux-promise">promises</a> through 
+<a href="https://github.com/yelouafi/redux-saga">generators</a>.
+There is no universal, <em>right</em> (<i class="fa fa-trademark" aria-hidden="true"></i>) solution - the best approach is relative
+to the scale and complexity of your application. 
+Even if there were, using a set of libraries means that once some superior
+approach to solving the problem comes along, you can swap out a library
+instead of starting all over in a new framework.</p>
+<p>In summary, readux doesn't do much, but it's designed to play well with
+other libraries, and that's a good thing(<i class="fa fa-trademark" aria-hidden="true"></i>).</p>
+<h2 id="how-to-extend-readux">How to extend readux</h2>
+<p>In concrete terms, readux allows writing <a href="./#store-enhancers"><em>store enhancers</em></a> augment the store,
+adding additional functionality like 'queries', debuggers etc and <a href="./#middleware"><em>middleware</em></a>,
+which sits between the call dispatching an action and it being forwarded to the
+reducer.
+Generally, if you mean to simply alter actions on a case-by-case (pure) basis,
+middleware will do. If you need to retain some state, e.g. to store a map of
+registered queries or data related to a debugger, then writing a store enhancer
+is the way to go.</p>
 <h2 id="middleware">Middleware</h2>
 <p>Middleware is used whenever you wish to automatically do something
 before an action reaches your store's root reducer or before the

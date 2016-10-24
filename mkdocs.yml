@@ -6,8 +6,9 @@ extra_css:
   - "extra/style.css"
 pages:
   - Home: 'index.md'
-  - Design:
+  - Documentation:
     - 'Design overview': 'design.md'
+    - 'Reference Documentation': 'reference.md'
     - 'Extending readux': 'extending.md'
   - Guides:
     - 'Effective Reagent': 'effective-reagent.md'

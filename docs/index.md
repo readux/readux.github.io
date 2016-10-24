@@ -15,7 +15,7 @@ mention your project in the docs :) -- Well, provided it is suitably open
 Readux aims to simplify state management by encouraging all state to be managed by a *store* which holds a single entity, which we
 call the *model*.
 
-The only way to update the model is to dispatch actions against the store. An action is merely a keyword (e.g. `:ADD-TODO`)
+The only way to update the model is to dispatch actions against the store. An action is merely a keyword (e.g. `:add-todo`)
 and some (optional) data.
 The point is for the dispatched actions to describe *what happened* and have the store contain the logic dictating what to 
 do in response to those actions. This way, we hope to encourage the separation of application logic from the presentation.

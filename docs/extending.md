@@ -1,11 +1,42 @@
 # Extending Readux
-
 This document assumes familiarity with what's written intended
-[the design](design.md), which explains the rationale and introduces core
-terminology.
+the [design overview](design.md) and [reference](reference.md) pages, 
+which explain the rationale and introduces core terminology.
 
-In general, Readux is intended to be extended through middleware and store
-enhancers, both of which are described below.
+## Of libraries and frameworks
+readux, like [redux](http://redux.js.org), is a fairly unopinionated *library*. 
+Libraries are limited in scope whereas frameworks are cohesive, thoughtful, but
+*prescriptive* solutions to a set of problems.
+Frameworks are a great thing when your use-case aligns perfectly with
+what the authors intended - less so when you're fighting them to achieve
+something not envisioned or catered to.
+
+Conversely, libraries are concerned with solving a relatively small problem
+and you're left to assemble the libraries needed to solve your problem.
+The upside is that you can tailor a solution matching the problem.
+
+For example, the Redux community has multiple takes on managing async
+requests, from [thunks](https://github.com/gaearon/redux-thunk) to 
+[promises](https://github.com/acdlite/redux-promise) through 
+[generators](https://github.com/yelouafi/redux-saga).
+There is no universal, *right* (<i class="fa fa-trademark" aria-hidden="true"></i>) solution - the best approach is relative
+to the scale and complexity of your application. 
+Even if there were, using a set of libraries means that once some superior
+approach to solving the problem comes along, you can swap out a library
+instead of starting all over in a new framework.
+
+In summary, readux doesn't do much, but it's designed to play well with
+other libraries, and that's a good thing(<i class="fa fa-trademark" aria-hidden="true"></i>).
+
+## How to extend readux
+In concrete terms, readux allows writing [*store enhancers*](extending.md#store-enhancers) augment the store,
+adding additional functionality like 'queries', debuggers etc and [*middleware*](extending.md#middleware),
+which sits between the call dispatching an action and it being forwarded to the
+reducer.
+Generally, if you mean to simply alter actions on a case-by-case (pure) basis,
+middleware will do. If you need to retain some state, e.g. to store a map of
+registered queries or data related to a debugger, then writing a store enhancer
+is the way to go.
 
 ## Middleware
 Middleware is used whenever you wish to automatically do something

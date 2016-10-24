@@ -1,7 +1,9 @@
 # Readux
-
-Readux is a *small* (~100 LOC core before comments & asserts) library for managing state in web 
+Readux is a small, in scope and codebase, library for managing state in web
 applications already using [reagent](https://github.com/reagent-project/reagent).
+
+Readux is conceptually closest to [redux](http://redux.js.org/) - and like redux,
+encourages customization and extension through middleware and store enhancers.
 
 ## Documentation is under construction...
 This project is very new and the documentation you see is a first pass - certain examples mentioned in passing
